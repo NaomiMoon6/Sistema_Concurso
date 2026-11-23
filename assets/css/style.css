@@ -1,0 +1,62 @@
+:root{--azul:#0b5ca8;--azul-esc:#084478;--azul-cl:#eaf2fb;--borda:#d3dde8;--texto:#1f2d3a;--cinza:#5b6b7a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--texto);background:#fff;line-height:1.5}
+.container{max-width:1050px;margin:0 auto;padding:0 16px}
+main{padding-top:20px;padding-bottom:40px;min-height:60vh}
+a{color:var(--azul)}
+.pular{position:absolute;left:-999px}
+.pular:focus{left:8px;top:8px;background:#fff;padding:6px;z-index:10}
+.topo{background:var(--azul);color:#fff}
+.topo-barra{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 16px;padding-top:10px;padding-bottom:10px}
+.marca{color:#fff;font-size:1.4rem;font-weight:bold;text-decoration:none}
+.topo nav{display:flex;flex-wrap:wrap;gap:2px 16px}
+.topo nav a{color:#fff;text-decoration:none;padding:4px 0;font-size:.95rem}
+.topo nav a:hover,.topo nav a:focus{text-decoration:underline}
+h1{color:var(--azul-esc);font-size:1.7rem;margin:.4em 0}
+h2{color:var(--azul-esc);font-size:1.25rem;margin:1.4em 0 .5em;border-bottom:2px solid var(--azul-cl);padding-bottom:4px}
+h3{font-size:1.05rem;margin:1em 0 .4em}
+.hero{background:var(--azul-cl);border-left:5px solid var(--azul);padding:16px 20px;margin-bottom:16px}
+.aviso-teste{color:#b00020;font-weight:bold}
+.botao,button{display:inline-block;background:var(--azul);color:#fff;border:0;border-radius:4px;padding:9px 16px;font-size:.95rem;cursor:pointer;text-decoration:none}
+.botao:hover,button:hover{background:var(--azul-esc)}
+.botao.sec,button.sec{background:#fff;color:var(--azul);border:1px solid var(--azul)}
+.botao.perigo,button.perigo{background:#b3261e}
+.botao.pequeno,button.pequeno{padding:4px 10px;font-size:.85rem}
+:focus-visible{outline:3px solid #f0a500;outline-offset:2px}
+form.caixa,.caixa{border:1px solid var(--borda);border-radius:6px;padding:16px;margin:12px 0;background:#fff}
+label{display:block;font-weight:bold;margin:12px 0 4px;font-size:.92rem}
+input[type=text],input[type=email],input[type=password],input[type=date],input[type=tel],input[type=number],input[type=file],input[type=datetime-local],input[type=time],select,textarea{width:100%;padding:8px;border:1px solid #9fb0c2;border-radius:4px;font-size:1rem;font-family:inherit;background:#fff}
+textarea{min-height:90px}
+.linha-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 16px}
+.ajuda{font-size:.82rem;color:var(--cinza);font-weight:normal}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:normal}
+.check input{width:auto;margin-top:4px}
+.alerta{padding:10px 14px;border-radius:4px;margin:10px 0;border:1px solid}
+.alerta.erro{background:#fdecea;border-color:#e0a09b;color:#7a1610}
+.alerta.sucesso{background:#e8f5e9;border-color:#9ccc9f;color:#1b5e20}
+.alerta.aviso,.alerta.info{background:#fff8e1;border-color:#e6cf84;color:#6b5100}
+.alerta ul{margin:4px 0 0 18px;padding:0}
+.tabela-rolagem{overflow-x:auto}
+table{border-collapse:collapse;width:100%;margin:8px 0;font-size:.92rem}
+th,td{border:1px solid var(--borda);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--azul-cl);color:var(--azul-esc)}
+.badge{display:inline-block;padding:1px 8px;border-radius:10px;font-size:.78rem;background:#e3e8ee;color:#333}
+.badge.ok{background:#d9f0dc;color:#1b5e20}
+.badge.aviso{background:#fff0c2;color:#6b5100}
+.badge.erro{background:#f9d6d3;color:#7a1610}
+.cartoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:12px 0}
+.cartao{border:1px solid var(--borda);border-radius:6px;padding:12px;text-align:center;background:#fff}
+.cartao strong{display:block;font-size:1.8rem;color:var(--azul)}
+.acoes{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.acoes form{display:inline;margin:0}
+details{border:1px solid var(--borda);border-radius:4px;padding:6px 10px;margin:4px 0;background:#fafcfe}
+summary{cursor:pointer;color:var(--azul);font-weight:bold}
+.comprovante{border:2px solid var(--azul);padding:20px;border-radius:6px;background:#fff}
+.comprovante img{float:right;margin:0 0 8px 12px}
+.rodape{background:var(--azul-esc);color:#fff;text-align:center;padding:16px 0;font-size:.9rem}
+.rodape p{margin:4px 0}
+@media (max-width:600px){h1{font-size:1.4rem}.topo nav{gap:2px 12px}}
+@media print{.topo,.rodape,.acoes,.pular,.sem-impressao{display:none!important}.comprovante{border:1px solid #000}}
+td.acoes{display:table-cell}
+td.acoes>*{margin:2px 6px 2px 0;vertical-align:middle}
+td.acoes form{display:inline-block}
