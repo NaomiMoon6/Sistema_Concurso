@@ -1,48 +1,137 @@
-# Sistema de Inscrição Educacional – Carmo de Minas (PHP OO + MySQL)
+# 🎓 Sistema de Inscrição Educacional — Carmo de Minas
+### Projeto de Análise e Desenvolvimento de Sistemas 2026
 
-## Instalação (cPanel)
-1. Envie esta pasta para `projetoeducacao/equipeX` (domínio oficinahotrods.com.br).
-2. No phpMyAdmin, selecione o banco `oficinahotrods_equipeX` e importe `config/schema.sql`.
-3. Edite `config/config.php`: `DB_NAME`, `DB_USER`, `DB_PASS` e `BASE_URL` (ex.: `/projetoeducacao/equipe1`).
-4. A pasta `uploads/` precisa de permissão de escrita (755 ou 775).
-5. Acesse `/install.php`, crie o primeiro administrador e **apague o `install.php`** do servidor.
-6. Login administrativo: `/admin/login.php`.
-Requisitos: PHP 7.4+ (PDO MySQL, fileinfo e iconv – padrão no cPanel).
+### 👥 Equipe
+> Ana Carolina Valim Faria <br>
+> Naomi Marra Marcondes <br>
+> Luccas Lima Barboza <br>
 
-## Como testar antes de 2027
-As datas do edital (08–10/01/2027 etc.) ficam em **Admin > Configurações**. Para testar todas as fases hoje,
-preencha "Data/hora simulada" (ex.: 09/01/2027 10:00 para inscrever; 16/01/2027 13:00 para recursos).
-Em produção, deixe o campo em branco.
+Sistema web para **inscrição, classificação e leilão de vagas** na contratação temporária de profissionais da educação (Designação 2027/2028) do Departamento Municipal de Educação de Carmo de Minas.
 
-## Estrutura
-- `classes/` entidades (Usuario, Candidato, Admin, Cargo, Inscricao, DocumentoInscricao, Recurso, LeilaoVaga,
-  ContratoLeilao, PunicaoCandidato, ConferenciaLeilao) + `Titulacao`, `Validador`, `Database`, `DAO`
-- `classes/dao/` DAOs (acesso ao banco, PDO com prepared statements; transações ficam nos serviços)
-- `classes/servicos/` Sessao, Auditoria, Calendario (prazos), MotorClassificacao, PdfGenerator,
-  InscricaoService, RecursoService, LeilaoService (regras de negócio)
-- raiz: páginas públicas; `candidato/`: área do candidato; `admin/`: painel administrativo
-- `config/schema.sql`: banco completo, cargos e datas iniciais
+Do cadastro do candidato até a atribuição da vaga, tudo em um só lugar: **sem planilhas, sem filas e com cada etapa registrada para auditoria.**
 
-## Requisitos x onde estão
-| Requisito | Onde |
+![PHP](https://img.shields.io/badge/PHP-OO-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+
+
+## 💡 O que é
+
+Um processo seletivo municipal tem muitas regras: prazos rígidos, limite de inscrições, critérios de desempate em ordem fixa, recursos, chamadas presenciais e punições por desistência. Este sistema automatiza tudo isso seguindo o edital.
+
+**Para quem é:**
+
+| Perfil | O que faz no sistema |
 |---|---|
-| RF01 cadastro, idade ≥ 18, dados pessoais | `cadastro.php`, `Candidato::validarDados()`, `Validador` |
-| RF02.1–02.3 cargos, limite de 2, pontuação, anexos | `candidato/inscricao_form.php`, `InscricaoService::salvar()` |
-| RF02.4 / RN02 edição só até 10/01 23h59 | `Calendario::inscricoesAbertas()` |
-| RF02.5 comprovante PDF + QR + novo a cada edição | `candidato/comprovante*.php`, `PdfGenerator`, tabela `inscricao_versao` |
-| RF03 classificação e desempates, PDF | `MotorClassificacao`, `admin/classificacao.php`, `resultados.php` |
-| RF04 recursos, trava de cargo, ajuste, definitiva | `admin/recurso*.php`, `RecursoService`, `InscricaoService::ajusteAdmin()` |
-| RF05 leilão, check-in, desclassificação, troca, suspensão 120 dias | `admin/leilao_chamada.php`, `LeilaoService` |
-| RNF02/RNF04 LGPD, hash de senha, logs (quem/quando/IP), versões | `Auditoria`, `log_auditoria`, `inscricao_versao`, `password_hash` |
+| 🙋 **Candidato** | Cria conta, escolhe cargos, envia documentos, edita a inscrição e baixa o comprovante |
+| 🛡️ **Comissão / Admin** | Registra recursos, ajusta dados, publica classificações e conduz o leilão de vagas |
+| 🌐 **Público** | Consulta a classificação preliminar e definitiva |
 
-## Decisões e suposições (o PDF não detalha os anexos I, II e III)
-- Escolaridade mínima e titulações aceitas de cada cargo são **valores iniciais editáveis** em Admin > Cargos.
-- 1º critério de desempate: candidato que atinge a escolaridade mínima do cargo fica à frente dos demais.
-  Empate total: ordem de inscrição.
-- Tempo de serviço: anos × 365 + dias. Um candidato não pode ter 2 inscrições ativas no mesmo cargo.
-- Conferência documental do leilão (Anexo II): checklist dos 7 documentos do anexo de inscrição.
-- Suspensão: do dia da desistência até data + 120 dias, inclusive. Troca de vaga (candidato contratado que vence
-  outro leilão) gera "desistência declarada" **sem** suspensão.
-- Classificação é gravada como "foto" (preliminar/definitiva) e só aparece ao público na data programada.
-- O comprovante em PDF é de texto (sem biblioteca externa); o QR Code aparece na versão em tela
-  (imagem gerada por api.qrserver.com) e o PDF traz o código e a URL de validação.
+---
+
+## ⚙️ Como funciona
+
+```
+Cadastro  →  Inscrição  →  Classificação  →  Recursos  →  Classificação  →  Leilão
+(CPF, +18)   (até 2 cargos)  preliminar       (presencial)   definitiva       de vagas
+```
+
+### 1. Cadastro e login
+Autocadastro com CPF, e-mail e senha criptografada. O sistema valida o CPF e confirma que o candidato tem **18 anos ou mais** na data da inscrição.
+
+### 2. Inscrição
+- Escolha entre **10 cargos** (Servente Escolar, Educador Infantil, Inspetor de Alunos, Auxiliar de Secretaria, professores, especialistas da educação e Psicopedagogo).
+- Informe tempo de serviço na rede municipal e titulação.
+- Anexe os comprovantes (identidade, CPF, título, residência, diploma etc.).
+- **Máximo de 2 inscrições ativas por CPF.**
+- Edite quantas vezes quiser **até 23h59 de 10/01/2027**. Depois disso, tudo é bloqueado automaticamente.
+- A cada edição, um **novo comprovante em PDF** é emitido, com código único, QR Code e carimbo de data/hora.
+
+### 3. Classificação
+O motor de classificação ordena os candidatos pelos critérios de desempate do edital, nesta ordem:
+
+1. Habilitação / escolaridade mínima exigida
+2. Maior tempo de serviço na rede municipal de Carmo de Minas
+3. Maior titulação
+4. Maior idade
+
+### 4. Recursos
+A comissão registra os recursos protocolados presencialmente. Durante essa fase, o **cargo do candidato fica travado**. Com base nos pareceres, a administração ajusta os dados e publica a **classificação definitiva**.
+
+### 5. Leilão de vagas
+- Check-in documental do candidato no momento da chamada.
+- Desclassificação por documentação incompleta ou divergente.
+- Atribuição do contrato e registro de desistência de cargo anterior.
+- **Suspensão automática de 120 dias** para quem abandona ou desiste de uma vaga, impedindo novos leilões no mesmo cargo.
+
+---
+
+## 📋 Regras de negócio principais
+
+| Código | Regra |
+|---|---|
+| RN01 | Impede uma 3ª inscrição para o mesmo CPF |
+| RN02 | Edições permitidas somente até 23h59 de 10/01/2027 |
+| RN03 | Cargo bloqueado durante a fase de recurso |
+| RN04 | Suspensão de 120 dias a partir da data formal de desistência |
+| RN05 | Desempate final pela data de nascimento mais antiga |
+
+---
+
+## 🗂️ Arquitetura
+
+Desenvolvido em **PHP orientado a objetos**, com banco **MySQL**.
+
+**Modelos**
+
+- `Usuario` (classe abstrata) → `Candidato` e `Admin`
+- `Cargo`, `Inscricao`, `DocumentoInscricao`, `Recurso`
+- `LeilaoVaga`, `ContratoLeilao`, `PunicaoCandidato`
+
+**Serviços**
+
+- `MotorClassificacao`: aplica os critérios de desempate
+- `PdfGenerator`: comprovantes com QR Code e relatórios de classificação
+- `AuthMiddleware` / `Sessao`: login e permissões (Candidato × Admin)
+
+**Banco de dados**
+
+`Candidato` · `Cargo` · `Inscricao` · `DocumentoInscricao` · `Recurso` · `LeilaoVaga` · `ContratoLeilao` · `PunicaoCandidato`
+
+---
+
+## 🔒 Segurança e qualidade
+
+- Senhas com hash
+- Logs auditáveis: quem alterou, quando e de qual IP
+- Histórico de versões de cada inscrição
+- Conformidade com a **LGPD**
+- Interface responsiva (celular, tablet e desktop)
+
+---
+
+## 🚀 Como testar
+
+**Requisitos:** PHP 8+, MySQL e um servidor local (XAMPP, WAMP ou similar).
+
+1. Clone o repositório na pasta do servidor (ex.: `htdocs`):
+   ```bash
+   git clone https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+   ```
+2. Crie um banco no MySQL e importe o script SQL do projeto.
+3. Configure a conexão com o banco no arquivo de configuração (host, banco, usuário e senha).
+4. Inicie Apache e MySQL.
+5. Acesse `http://localhost/SEU-REPOSITORIO`.
+
+**Roteiro rápido de teste:**
+
+- Cadastre um candidato e confirme que menores de 18 anos são recusados.
+- Crie 2 inscrições e confirme que a 3ª é bloqueada.
+- Edite uma inscrição e baixe o novo comprovante.
+- Entre como admin e registre um recurso.
+- Rode um leilão e registre uma desistência para ver a suspensão de 120 dias.
+
+## 🌐 Link de Acesso: 
+
+Deploy no servidor Oficina HotRods. Feito para teste e avaliação do professor. [Acessar Site](https://oficinahotrods.com.br/equipeX/)

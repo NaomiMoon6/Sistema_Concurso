@@ -14,8 +14,14 @@ $tituloPagina = $tituloPagina ?? 'Administração';
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
-  <div class="container topo-barra">
-    <a class="marca" href="<?= e(url('admin/index.php')) ?>">Administração</a>
+  <div class="container topo-marca">
+    <a class="marca" href="<?= e(url('admin/index.php')) ?>" aria-label="Início">
+      <img src="<?= e(url('assets/img/logo-prefeitura.png')) ?>" alt="Prefeitura de Carmo de Minas" class="logo logo-pref">
+      <span class="logo-div" aria-hidden="true"></span>
+      <img src="<?= e(url('assets/img/logo-educacao.png')) ?>" alt="Departamento de Educação – Carmo de Minas" class="logo logo-edu">
+    </a><span class="selo-admin">Administração</span>
+  </div>
+  <div class="topo-menu"><div class="container">
     <nav aria-label="Menu administrativo">
       <a href="<?= e(url('admin/index.php')) ?>">Painel</a>
       <a href="<?= e(url('admin/inscricoes.php')) ?>">Inscrições</a>
@@ -30,7 +36,7 @@ $tituloPagina = $tituloPagina ?? 'Administração';
       <a href="<?= e(url('index.php')) ?>">Site</a>
       <a href="<?= e(url('admin/logout.php')) ?>">Sair</a>
     </nav>
-  </div>
+  </div></div>
 </header>
 <main id="conteudo" class="container">
 <?php if (Calendario::simulada()): ?>

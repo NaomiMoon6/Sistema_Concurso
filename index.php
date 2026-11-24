@@ -6,16 +6,19 @@ $fase = Calendario::faseAtual();
 require RAIZ . '/includes/cabecalho.php';
 ?>
 <section class="hero">
-  <h1>Inscrição ao Processo Seletivo da Educação – 2027</h1>
+  <span class="hero-selo">Edital nº XX/2027</span>
+  <h1 class="hero-titulo">Inscrição ao Processo Seletivo da Educação – 2027</h1>
   <p class="aviso-teste">TODOS OS DADOS DESTE SITE SÃO FICTÍCIOS PARA TESTE!</p>
-  <p>Edital nº XX/2027 – Departamento Municipal de Educação de Carmo de Minas. Contratação temporária (designação 2027/2028) de profissionais da educação.</p>
-  <p><strong>Fase atual:</strong> <?= e($fase) ?></p>
+  <p class="hero-texto">Departamento Municipal de Educação de Carmo de Minas. Contratação temporária (designação 2027/2028) de profissionais da educação.</p>
+  <p class="hero-fase"><span class="ponto"></span><strong>Fase atual:</strong> <?= e($fase) ?></p>
+  <div class="hero-acoes">
   <?php if (Sessao::candidato()): ?>
     <a class="botao" href="<?= e(url('candidato/painel.php')) ?>">Ir para o meu painel</a>
   <?php else: ?>
-    <a class="botao" href="<?= e(url('cadastro.php')) ?>">Começar Inscrição</a>
+    <a class="botao" href="<?= e(url('cadastro.php')) ?>">Começar</a>
     <a class="botao sec" href="<?= e(url('login.php')) ?>">Já tenho cadastro</a>
   <?php endif; ?>
+  </div>
 </section>
 
 <h2>Cronograma</h2>

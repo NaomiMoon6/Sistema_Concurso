@@ -15,8 +15,14 @@ $_cabAdm = Sessao::admin();
 <body>
 <a class="pular" href="#conteudo">Ir para o conteúdo</a>
 <header class="topo">
-  <div class="container topo-barra">
-    <a class="marca" href="<?= e(url('index.php')) ?>">Educação</a>
+  <div class="container topo-marca">
+    <a class="marca" href="<?= e(url('index.php')) ?>" aria-label="Início">
+      <img src="<?= e(url('assets/img/logo-prefeitura.png')) ?>" alt="Prefeitura de Carmo de Minas" class="logo logo-pref">
+      <span class="logo-div" aria-hidden="true"></span>
+      <img src="<?= e(url('assets/img/logo-educacao.png')) ?>" alt="Departamento de Educação – Carmo de Minas" class="logo logo-edu">
+    </a>
+  </div>
+  <div class="topo-menu"><div class="container">
     <nav aria-label="Menu principal">
       <a href="<?= e(url('index.php')) ?>">Início</a>
       <?php if ($_cabCand): ?>
@@ -35,7 +41,7 @@ $_cabAdm = Sessao::admin();
         <a href="<?= e(url('logout.php')) ?>">Sair</a>
       <?php endif; ?>
     </nav>
-  </div>
+  </div></div>
 </header>
 <main id="conteudo" class="container">
 <?php foreach (flashes() as $_f): ?>
